@@ -1,6 +1,7 @@
 import unittest
 from besttrade.tests.db.SqlLite3Connector import SqlLite3Connector
 from besttrade.src.db import DataAccessObject
+from besttrade.src.domain import Investor
 
 
 class TestGetAllInvestors(unittest.TestCase):
@@ -11,7 +12,7 @@ class TestGetAllInvestors(unittest.TestCase):
         scripts_path = './besttrade/tests/resources'
         with open(f'{scripts_path}/create_db_objects.sql', 'r') as f:
             cnx.executescript(f.read())
-        with open(f'{scripts_path}/populate_investor.sql', 'r') as f:
+        with open(f'{scripts_path}/populate_db.sql', 'r') as f:
             cnx.executescript(f.read())
         cnx.close()
 
@@ -21,7 +22,7 @@ class TestGetAllInvestors(unittest.TestCase):
         self.assertIsNotNone(investors)
         self.assertTrue(isinstance(investors, list))
         self.assertFalse(len(investors) == 0)
-        self.assertEqual(2, len(investors))
+        self.assertEqual(3, len(investors))
         investor_names = [investor.username for investor in investors]
         self.assertTrue(
             all(investor in investor_names for investor in ['admin', 'user1']))
@@ -32,7 +33,7 @@ class TestGetAllInvestors(unittest.TestCase):
         self.assertIsNotNone(investors)
         self.assertTrue(isinstance(investors, list))
         self.assertFalse(len(investors) == 0)
-        self.assertEqual(3, len(investors))
+        self.assertEqual(4, len(investors))
         investor_names = [investor.username for investor in investors]
         self.assertTrue(
             all(investor in investor_names for investor in ['admin', 'user1', 'user2']))
@@ -44,3 +45,15 @@ class TestGetAllInvestors(unittest.TestCase):
         self.assertEqual(1, investor.id)
         self.assertEqual('admin', investor.username)
         self.assertEqual('ACTIVE', investor.status)
+
+    def test_get_investors_by_name(self):
+        dao = DataAccessObject(SqlLite3Connector())
+        investors = dao.get_investors_by_name('admin')
+        self.assertIsNotNone(investors)
+        self.assertFalse(len(investors) == 0)
+        self.assertEqual(2, len(investors))
+        self.assertTrue(isinstance(investors[0], Investor))
+        names = {investor.username for investor in investors}
+        self.assertFalse(len(names) == 0)
+        self.assertEqual(1, len(names))
+        self.assertEqual('admin', names.pop())
