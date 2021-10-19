@@ -34,4 +34,4 @@ jobs:
         coverage run -m unittest discover
     - name: Generate unit test coverage report
       run: |
-        coverage report --fail-under=95 -m
+        coverage report --fail-under=75 -m

@@ -7,3 +7,10 @@ create table investor (
     name VARCHAR(255) NOT NULL,
     status VARCHAR(20) NOT NULL
 );
+
+create table account (
+    account_number INTEGER PRIMARY KEY,
+    investor_id INTEGER NOT NULL,
+    balance FLOAT NOT NULL,
+    FOREIGN KEY(investor_id) REFERENCES investor(id)
+)
