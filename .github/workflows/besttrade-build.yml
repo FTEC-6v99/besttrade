@@ -72,14 +72,14 @@ jobs:
       with:
         name: besttrade
         path: besttrade.zip
-    - name: Deploy artifac to AWS Elastic Beanstalk
-      uses: einaregilsson/beanstalk-deploy@v18
-      with:
-        aws_access_key: ${{ secrets.AWS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
-        application_name: ebflaskdemo
-        environment_name: ${{ env.EB_ENV }}
-        version_label: ${{ github.head_ref }}
-        region: us-west-2
-        deployment_package: besttrade.zip
+    # - name: Deploy artifac to AWS Elastic Beanstalk
+    #   uses: einaregilsson/beanstalk-deploy@v18
+    #   with:
+    #     aws_access_key: ${{ secrets.AWS_KEY_ID }}
+    #     aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
+    #     application_name: ebflaskdemo
+    #     environment_name: ${{ env.EB_ENV }}
+    #     version_label: ${{ github.head_ref }}
+    #     region: us-west-2
+    #     deployment_package: besttrade.zip
 
