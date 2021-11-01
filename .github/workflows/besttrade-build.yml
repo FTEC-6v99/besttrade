@@ -64,6 +64,7 @@ jobs:
         path: |
           .coverage/**
   printbranch:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Print branch...
