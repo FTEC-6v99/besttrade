@@ -61,19 +61,19 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     needs: build
-      steps:
-      - uses: actions/checkout@v2
-      - name: Generate deployment package
-        run: |
-          zip -r besttrade.zip . -x *.git* *.venv/**\*
-      - name: Deploy artifac to AWS Elastic Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v18
-        with:
-          aws_access_key: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
-          application_name: ebflaskdemo
-          environment_name: ${{ EB_ENV }}
-          version_label: ${{ GITHUB_HEAD_REF }}
-          region: us-west-2
-          deployment_package: besttrade.zip
+    steps:
+    - uses: actions/checkout@v2
+    - name: Generate deployment package
+      run: |
+        zip -r besttrade.zip . -x *.git* *.venv/**\*
+    - name: Deploy artifac to AWS Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v18
+      with:
+        aws_access_key: ${{ secrets.AWS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
+        application_name: ebflaskdemo
+        environment_name: ${{ EB_ENV }}
+        version_label: ${{ GITHUB_HEAD_REF }}
+        region: us-west-2
+        deployment_package: besttrade.zip
 
