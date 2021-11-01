@@ -59,14 +59,19 @@ jobs:
         path: |
           .coverage/**
   deploy:
+    if: github.event_name == 'release' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
     needs: build
     steps:
     - uses: actions/checkout@v2
     - name: Generate deployment package
       run: |
         zip -r besttrade.zip . -x *.git* *.venv/**\*
+    - name: Archive code artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: besttrade
+        path: besttrade.zip
     - name: Deploy artifac to AWS Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v18
       with:
