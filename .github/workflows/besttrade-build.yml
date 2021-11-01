@@ -64,6 +64,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Generate deployment package
       run: |
+        echo ${{ github.ref }}
         zip -r besttrade.zip . -x *.git* *.venv/**\*
     - name: Archive code artifact
       uses: actions/upload-artifact@v2
