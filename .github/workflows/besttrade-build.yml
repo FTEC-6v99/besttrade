@@ -11,18 +11,17 @@ on:
   release:
     types: [created]
 
-if: github.event_name == 'realease'
-env:
-  EB_ENV: Ebflaskdemo
-
-if: github.event_name != 'release'
-env:
-  EB_ENV: Ebflaskdemo_env
-
-# env:
-#   EB_ENV: ${{ github.event_name == 'release' ? 'Ebflaskdemo' : 'Ebflaskdemo_env' }}
-
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set production conditional environment values
+      if: github.event_name == 'release'
+      run: echo "Ebflaskdemo" >> $EB_ENV
+    - name: Set non-production conditional environment values
+      if: github.event_name != 'release'
+      run: |
+        echo "Ebflaskdemo_env" >> $EB_ENV
   build:
     runs-on: ubuntu-latest
     steps:
