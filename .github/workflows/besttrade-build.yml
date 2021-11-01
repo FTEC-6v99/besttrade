@@ -61,7 +61,7 @@ jobs:
         path: |
           .coverage/**
   deploy:
-    if: github.event_name == 'release' || steps.extract_branch.outputs.branch == 'main'
+    if: github.event_name == 'release' || ${{ steps.extract_branch.outputs.branch }} == 'main'
     runs-on: ubuntu-latest
     needs: build
     steps:
