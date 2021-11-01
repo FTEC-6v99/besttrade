@@ -65,7 +65,9 @@ jobs:
           .coverage/**
   printbranch:
     runs-on: ubuntu-latest
-    run: echo jobs.setup.steps.branch_name.outputs
+    steps:
+      - name: Print branch
+        run: echo jobs.setup.steps.branch_name.outputs
   deploy:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
