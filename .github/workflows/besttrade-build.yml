@@ -52,11 +52,11 @@ jobs:
       run: |
         coverage html
     - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-coverage
-          path: |
-            .coverage/**
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-coverage
+        path: |
+          .coverage/**
   deploy:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
