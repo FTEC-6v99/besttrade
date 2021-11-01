@@ -59,7 +59,7 @@ jobs:
     - name: print out ref
       run: echo ${{ github.ref }}
   deploy:
-    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    # if: github.event_name == 'release' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -72,6 +72,10 @@ jobs:
       with:
         name: besttrade
         path: besttrade.zip
+    - name: Print Environment name
+      run: echo ${{ env.EB_ENV }}
+    - name: Print version label
+      run: echo ${{ github.head_ref }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
     #   uses: einaregilsson/beanstalk-deploy@v18
     #   with:
