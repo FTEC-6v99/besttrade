@@ -17,7 +17,8 @@ jobs:
     steps:
     - name: Set production conditional environment values
       if: github.event_name == 'release'
-      run: echo "EB_ENV=Ebflaskdemo" >> $GITHUB_ENV
+      run: |
+        echo "EB_ENV=Ebflaskdemo" >> $GITHUB_ENV
     - name: Set non-production conditional environment values
       if: github.event_name != 'release'
       run: |
@@ -72,7 +73,7 @@ jobs:
         aws_access_key: ${{ secrets.AWS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
         application_name: ebflaskdemo
-        environment_name: ${{ EB_ENV }}
+        environment_name: ${{ env.EB_ENV }}
         version_label: ${{ GITHUB_HEAD_REF }}
         region: us-west-2
         deployment_package: besttrade.zip
