@@ -8,6 +8,19 @@ on:
     branches: [ '**' ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [created]
+
+if: github.event_name == 'realease'
+env:
+  EB_ENV: Ebflaskdemo
+
+if: github.event_name != 'release'
+env:
+  EB_ENV: Ebflaskdemo_env
+
+# env:
+#   EB_ENV: ${{ github.event_name == 'release' ? 'Ebflaskdemo' : 'Ebflaskdemo_env' }}
 
 jobs:
   build:
@@ -35,3 +48,32 @@ jobs:
     - name: Generate unit test coverage report
       run: |
         coverage report --fail-under=75 -m
+    - name: Generate coverage HTML report
+      run: |
+        coverage html
+    - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-coverage
+          path: |
+            .coverage/**
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    needs: build
+      steps:
+      - uses: actions/checkout@v2
+      - name: Generate deployment package
+        run: |
+          zip -r besttrade.zip . -x *.git* *.venv/**\*
+      - name: Deploy artifac to AWS Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
+          application_name: ebflaskdemo
+          environment_name: ${{ EB_ENV }}
+          version_label: ${{ GITHUB_HEAD_REF }}
+          region: us-west-2
+          deployment_package: besttrade.zip
+
