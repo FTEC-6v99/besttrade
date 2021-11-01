@@ -11,6 +11,7 @@ on:
 
 jobs:
   setup:
+    id: setup
     runs-on: ubuntu-latest
     steps:
     - name: Set production conditional environment values
@@ -24,6 +25,7 @@ jobs:
     - name: Print out new variables
       run: echo ${{ env.EB_ENV }}
   build:
+    id: build
     runs-on: ubuntu-latest
     needs: setup
     steps:
@@ -61,6 +63,7 @@ jobs:
     - name: print out ref
       run: echo ${{ github.ref }}
   deploy:
+    id: deploy
     # if: github.event_name == 'release' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build
@@ -75,7 +78,7 @@ jobs:
         name: besttrade
         path: besttrade.zip
     - name: Print Environment name
-      run: echo ${{ env.EB_ENV }}
+      run: echo ${{ jobs.setup.env.EB_ENV }}
     - name: Print version label
       run: echo ${{ github.head_ref }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
