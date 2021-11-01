@@ -25,6 +25,8 @@ jobs:
       id: extract_branch
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+    - name: Print branch name
+      run: echo ${{ steps.extract_branch.outputs.branch }}
   build:
     runs-on: ubuntu-latest
     needs: setup
@@ -61,7 +63,7 @@ jobs:
         path: |
           .coverage/**
   deploy:
-    if: github.event_name == 'release' || ${{ steps.extract_branch.outputs.branch }} == 'main'
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     needs: build
     steps:
