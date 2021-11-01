@@ -57,7 +57,7 @@ jobs:
         path: |
           .coverage/**
   deploy:
-    if: github.event_name == 'release' || contains(GITHUB_REF, 'main')
+    if: github.event_name == 'release' || contains(${{GITHUB_REF}}, 'main')
     runs-on: ubuntu-latest
     needs: build
     steps:
