@@ -74,7 +74,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
         application_name: ebflaskdemo
         environment_name: ${{ env.EB_ENV }}
-        version_label: ${{ GITHUB_HEAD_REF }}
+        version_label: ${{ env.GITHUB_HEAD_REF }}
         region: us-west-2
         deployment_package: besttrade.zip
 
