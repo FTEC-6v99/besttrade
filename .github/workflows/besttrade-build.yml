@@ -56,14 +56,8 @@ jobs:
         name: test-coverage
         path: |
           .coverage/**
-  printbranch:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print branch...
-        run: echo ${jobs.setup.steps.branch_name.outputs}
   deploy:
-    if: github.event_name == 'release' || ${GITHUB_REF#refs/heads/} == 'main'
+    if: github.event_name == 'release' || contains(GITHUB_REF, 'main')
     runs-on: ubuntu-latest
     needs: build
     steps:
