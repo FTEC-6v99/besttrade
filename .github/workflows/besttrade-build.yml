@@ -21,6 +21,8 @@ jobs:
       if: github.event_name != 'release'
       run: |
         echo "EB_ENV=Ebflaskdemo_env" >> $GITHUB_ENV
+    - name: Print out new variables
+      run: echo ${{ env.EB_ENV }}
   build:
     runs-on: ubuntu-latest
     needs: setup
