@@ -63,7 +63,7 @@ jobs:
         path: |
           .coverage/**
   deploy:
-    if: github.event_name == 'release' || env.BRANCH_NAME == 'main'
+    if: github.event_name == 'release' || ${{ env.BRANCH_NAME }} == 'main'
     runs-on: ubuntu-latest
     needs: build
     steps:
