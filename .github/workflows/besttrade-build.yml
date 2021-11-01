@@ -67,7 +67,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
         application_name: ebflaskdemo
         environment_name: Ebflaskdemo-env
-        version_label: '1.0.0'
+        version_label: '1.0.1'
         region: us-west-2
         deployment_package: besttrade.zip
 
