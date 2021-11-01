@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print branch...
-        run: echo jobs.setup.steps.branch_name.outputs
+        run: echo ${{ jobs.setup.steps.branch_name.outputs }}
   deploy:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
