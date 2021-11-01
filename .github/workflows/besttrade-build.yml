@@ -17,13 +17,14 @@ jobs:
     steps:
     - name: Set production conditional environment values
       if: github.event_name == 'release'
-      run: echo "Ebflaskdemo" >> $EB_ENV
+      run: echo "EB_ENV=Ebflaskdemo" >> $GITHUB_ENV
     - name: Set non-production conditional environment values
       if: github.event_name != 'release'
       run: |
-        echo "Ebflaskdemo_env" >> $EB_ENV
+        echo "EB_ENV=Ebflaskdemo_env" >> $GITHUB_ENV
   build:
     runs-on: ubuntu-latest
+    needs: setup
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
