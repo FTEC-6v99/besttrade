@@ -75,7 +75,7 @@ jobs:
         name: besttrade
         path: besttrade.zip
     - name: Print Environment name
-      run: echo ${{ jobs.setup.env.EB_ENV }}
+      run: echo ${{ job.setup.env.EB_ENV }}
     - name: Print version label
       run: echo ${{ github.head_ref }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
