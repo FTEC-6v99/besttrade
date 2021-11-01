@@ -71,7 +71,7 @@ jobs:
       run: echo "VERSION_LABEL=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
     - name: Non prod version number
       if: github.event_name != 'release'
-      run: echo "VERSION_LABEL=${GITHUB_REF}[:4]" >> $GITHUB_ENV
+      run: echo "VERSION_LABEL=${GITHUB_SHA} | cut c0-4" >> $GITHUB_ENV
     - name: Print version
       run: echo ${{ env.VERSION_LABEL }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
