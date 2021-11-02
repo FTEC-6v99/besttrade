@@ -60,28 +60,43 @@ jobs:
       with:
         name: besttrade
         path: besttrade.zip
-    - name: Calculate Elastic Beanstalk env name - Prod
-      if: github.event_name == 'release'
-      run: echo "EB_ENV=Ebflaskdemo" >> $GITHUB_ENV
-    - name: Calculate Elastic Beanstalk env name - Non Prod
-      if: github.event_name != 'release'
-      run: echo "EB_ENV=Ebflaskdemo-env" >> $GITHUB_ENV
-    # - name: Prod version number
+    # - name: Calculate Elastic Beanstalk env name - Prod
     #   if: github.event_name == 'release'
-    #   run: echo "VERSION_LABEL=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-    - name: Calculate version number
-      id: calc_ver
+    #   run: echo "EB_ENV=Ebflaskdemo" >> $GITHUB_ENV
+    # - name: Calculate Elastic Beanstalk env name - Non Prod
+    #   if: github.event_name != 'release'
+    #   run: echo "EB_ENV=Ebflaskdemo-env" >> $GITHUB_ENV
+    - name: Calculate environment for Elastic Bean deployment
+      id: env_params
       run: |
         if ${{ github.event_name == 'release' }}
         then
-          echo "Production release detected: Getting version number from release tag: ${GITHUB_REF}"
-          echo "::set-output name=ver::${GITHUB_REF#refs/heads/}"
-        else
-          echo "Non production release detected: Getting version from commit SHA: ${GITHUB_SHA}"
-          echo "::set-output name=ver::${GITHUB_SHA::7}"
-        fi
-    - name: Print version
-      run: echo ${{ steps.calc_ver.outputs.ver }}
+          echo "Production release detected"
+          echo "Setting EB environment to: Ebflaskdemo"
+          echo "Setting version number to: ${GITHUB_REF#/refs/heads}"
+          echo "::set-output name=EB_ENV::Ebflaskdemo"
+          echo "::set-output name=VERSION::${GITHUB_REF#refs/heads/}"
+        else 
+          echo "Non Production release detected"
+          echo "Setting EB environment to: Ebflaskdemo_env"
+          echo "Setting version number to: ${GITHUB_SHA::7}"
+          echo "::set-output name=EB_ENV::Ebflaskdemo"
+          echo "::set-output name=VERSION::${GITHUB_SHA::7}"
+    # - name: Calculate version number
+    #   id: calc_ver
+    #   run: |
+    #     if ${{ github.event_name == 'release' }}
+    #     then
+    #       echo "Production release detected: Getting version number from release tag: ${GITHUB_REF}"
+    #       echo "::set-output name=ver::${GITHUB_REF#refs/heads/}"
+    #     else
+    #       echo "Non production release detected: Getting version from commit SHA: ${GITHUB_SHA}"
+    #       echo "::set-output name=ver::${GITHUB_SHA::7}"
+    #     fi
+    - name: Print params
+      run: |
+        echo ${{ steps.env_params.outputs.EB_ENV }}
+        echo ${{ steps.env_params.outputs.VERSION }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
     #   uses: einaregilsson/beanstalk-deploy@v18
     #   with:
