@@ -10,20 +10,8 @@ on:
     types: [created]
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Set production conditional environment values
-      if: github.event_name == 'release'
-      run: |
-        echo "EB_ENV=Ebflaskdemo" >> $GITHUB_ENV
-    - name: Set non-production conditional environment values
-      if: github.event_name != 'release'
-      run: |
-        echo "EB_ENV=Ebflaskdemo_env" >> $GITHUB_ENV
   build:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -72,14 +60,31 @@ jobs:
       with:
         name: besttrade
         path: besttrade.zip
-    # - name: Deploy artifac to AWS Elastic Beanstalk
-    #   uses: einaregilsson/beanstalk-deploy@v18
-    #   with:
-    #     aws_access_key: ${{ secrets.AWS_KEY_ID }}
-    #     aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
-    #     application_name: ebflaskdemo
-    #     environment_name: ${{ env.EB_ENV }}
-    #     version_label: ${{ github.head_ref }}
-    #     region: us-west-2
-    #     deployment_package: besttrade.zip
+    - name: Calculate environment for Elastic Bean deployment
+      id: env_params
+      run: |
+        if ${{ github.event_name == 'release' }}
+        then
+          echo "Production release detected"
+          echo "Setting EB environment to: Ebflaskdemo"
+          echo "Setting version number to: ${GITHUB_REF#/refs/heads}"
+          echo "::set-output name=EB_ENV::Ebflaskdemo"
+          echo "::set-output name=VERSION::${GITHUB_REF#refs/heads/}"
+        else 
+          echo "Non Production release detected"
+          echo "Setting EB environment to: Ebflaskdemo_env"
+          echo "Setting version number to: ${GITHUB_SHA::7}"
+          echo "::set-output name=EB_ENV::Ebflaskdemo_env"
+          echo "::set-output name=VERSION::${GITHUB_SHA::7}"
+        fi
+    - name: Deploy artifac to AWS Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v18
+      with:
+        aws_access_key: ${{ secrets.AWS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_ACCESS_KEY }}
+        application_name: ebflaskdemo
+        environment_name: ${{ steps.env_params.outputs.EB_ENV }}
+        version_label: ${{ steps.env_params.outputs.VERSION }}
+        region: us-west-2
+        deployment_package: besttrade.zip
 
