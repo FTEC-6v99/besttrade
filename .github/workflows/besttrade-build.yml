@@ -74,7 +74,7 @@ jobs:
           echo "Non Production release detected"
           echo "Setting EB environment to: Ebflaskdemo_env"
           echo "Setting version number to: ${GITHUB_SHA::7}"
-          echo "::set-output name=EB_ENV::Ebflaskdemo_env"
+          echo "::set-output name=EB_ENV::Ebflaskdemo-env"
           echo "::set-output name=VERSION::${GITHUB_SHA::7}"
         fi
     - name: Deploy artifac to AWS Elastic Beanstalk
