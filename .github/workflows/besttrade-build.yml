@@ -72,7 +72,7 @@ jobs:
     - name: Calculate version number
       id: calc_ver
       run: |
-        if [[ ${{ github.event_name == 'release' }} ]]
+        if ${{ github.event_name == 'release' }}
         then
           echo "Production release detected: Getting version number from release tag: ${GITHUB_REF}"
           echo "::set-output name=ver::${GITHUB_REF#refs/heads/}"
