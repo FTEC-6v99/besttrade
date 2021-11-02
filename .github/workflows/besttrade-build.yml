@@ -78,7 +78,7 @@ jobs:
           echo "::set-output name=ver::${GITHUB_REF#refs/heads/}"
         else
           echo "Non production release detected: Getting version from commit SHA: ${GITHUB_SHA}"
-          echo "::set-output name=ver::$(${GITHUB_SHA} | cut -c1-7)"
+          echo "::set-output name=ver::${GITHUB_SHA::7}"
         fi
     - name: Print version
       run: echo ${{ steps.calc_ver.outputs.ver }}
