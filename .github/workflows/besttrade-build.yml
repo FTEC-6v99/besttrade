@@ -79,7 +79,7 @@ jobs:
           echo "::set-output name=ver::$(${GITHUB_SHA} | cut -c1-7)"
         fi
     - name: Print version
-      run: echo {{ steps.calc_ver.outputs.ver }}
+      run: echo ${{ steps.calc_ver.outputs.ver }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
     #   uses: einaregilsson/beanstalk-deploy@v18
     #   with:
