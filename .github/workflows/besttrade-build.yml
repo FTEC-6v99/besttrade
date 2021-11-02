@@ -82,6 +82,7 @@ jobs:
           echo "Setting version number to: ${GITHUB_SHA::7}"
           echo "::set-output name=EB_ENV::Ebflaskdemo"
           echo "::set-output name=VERSION::${GITHUB_SHA::7}"
+        fi
     # - name: Calculate version number
     #   id: calc_ver
     #   run: |
