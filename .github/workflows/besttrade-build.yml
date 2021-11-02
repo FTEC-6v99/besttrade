@@ -66,14 +66,19 @@ jobs:
     - name: Calculate Elastic Beanstalk env name - Non Prod
       if: github.event_name != 'release'
       run: echo "EB_ENV=Ebflaskdemo-env" >> $GITHUB_ENV
-    - name: Prod version number
-      if: github.event_name == 'release'
-      run: echo "VERSION_LABEL=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-    - name: Non prod version number
-      if: github.event_name != 'release'
-      run: echo "VERSION_LABEL=${GITHUB_SHA} | cut -c1-4" >> $GITHUB_ENV
+    # - name: Prod version number
+    #   if: github.event_name == 'release'
+    #   run: echo "VERSION_LABEL=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+    - name: Calculate version number
+      id: calc_ver
+      run: |
+        if [[ ${{ github.event_name == 'release' }} ]]
+        then 
+          echo "::set-output name=ver::${GITHUB_REF#refs/heads/}"
+        else
+          echo "::set-output name=ver::$(${GITHUB_SHA} | cut -c1-7)"
     - name: Print version
-      run: echo ${{ env.VERSION_LABEL }}
+      run: echo {{ steps.calc_ver.outputs.ver }}
     # - name: Deploy artifac to AWS Elastic Beanstalk
     #   uses: einaregilsson/beanstalk-deploy@v18
     #   with:
