@@ -4,7 +4,7 @@ drop table if exists account;
 
 create table investor (
     id INTEGER PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
     status VARCHAR(20) NOT NULL
 );
 

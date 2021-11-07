@@ -112,3 +112,6 @@ dmypy.json
 
 # for mac os
 .DS_Store
+
+# exclude local files
+besttrade/tests/playground.py
